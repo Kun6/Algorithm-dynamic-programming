@@ -1,0 +1,14 @@
+int  res(int i, int j) {
+    if (dp[i][j]>=0) {
+        return dp[i][j];
+    }
+    int rec = 0;
+    if (i == n) {
+        rec = 0;
+    } else if (j < w[i]) {
+        res(i+1, j);
+    } else {
+        rec = max(res(i+1, j),res(i+1, j-w[i])+v[i]);
+    }
+    return dp[i][j] = rec;
+    
