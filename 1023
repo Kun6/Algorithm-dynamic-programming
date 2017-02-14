@@ -1,0 +1,66 @@
+#include <iostream>
+#include <cstdio>
+#include <ctime>
+#include <cstring>
+#include <algorithm>
+//#define M 1000
+
+using namespace std;
+
+int c = 0;
+struct E {
+    char stuNum[7];//在这里的数组只要符合长度要求即可
+    char name[9];//在这里的数组只要符合长度要求即可
+    int score;
+} stu[100000];//在这里的数组开的大一些，防止出现 Runtime error!
+bool cmp (E a, E b) {
+  
+    if (c == 1) {
+      
+        return strcmp(a.stuNum, b.stuNum) < 0;
+    }
+    
+    
+    else if (c == 2)
+    {
+        if (strcmp(a.name,b.name) == 0) {
+            return strcmp(a.stuNum,b.stuNum) < 0;
+        } else {
+            return strcmp(a.name, b.name) < 0;
+        }
+    }
+    
+    
+    else
+    {
+        if (a.score == b.score) {
+            return strcmp(a.stuNum, b.stuNum) <0;
+        } else {
+        return a.score < b.score;
+        }
+    }
+}
+
+int main() {
+ 
+    int n = 0, caseNum = 1;
+    while(scanf("%d%d",&n,&c) != EOF) {
+        if(n == 0 && c == 0) break;
+        for(int i = 0; i < n; i++) {
+            scanf("%s%s%d",stu[i].stuNum,stu[i].name,&stu[i].score);
+        }
+        
+        sort(stu, stu + n, cmp);
+        
+        printf("Case %d:\n",caseNum);
+        
+        for(int i = 0; i < n; i++) {
+            printf("%s %s %d\n",stu[i].stuNum,stu[i].name,stu[i].score);
+        }
+        caseNum++;
+        
+    }
+    
+    
+    return 0;
+}
