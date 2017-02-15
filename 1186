@@ -1,0 +1,78 @@
+
+#include <iostream>
+#include <cstdio>
+#include <ctime>
+#include <cstring>
+#include <algorithm>
+//#define M 1000
+#define ISRUNYEAR(x) x%100 != 0 && x%4 == 0 || x%400 == 0 ? 1 : 0
+
+using namespace std;
+
+int monthDay[13][2]={
+    {0,0},
+    {31,31},
+    {28,29},
+    {31,31},
+    {30,30},
+    {31,31},
+    {30,30},
+    {31,31},
+    {31,31},
+    {30,30},
+    {31,31},
+    {30,30},
+    {31,31}
+};
+
+struct S {       //注意结构体中函数的构造
+    int day;
+    int month;
+    int year;
+    int numm;
+    int fun() {
+        day++;
+        numm++;
+        if(day > monthDay[month][ISRUNYEAR(year)]) {
+            day = 1;
+            month++;
+            if (month > 12) {
+                month = 1;
+                year++;
+                numm = 1;
+            }
+        }
+        return 0;
+    }
+};
+int buf[3001][368][4];
+
+int Abs(int x) {
+    return x<0 ? -x : x;
+}
+int main() {
+    S tmp;
+    tmp.day = 1;
+    tmp.year = 0;
+    tmp.month = 1;
+    tmp.numm = 1;
+    while(tmp.year != 3001) {         //应用结构题函数，用tmp变量来计算结构题中的值，并保存于多元数组中
+        
+        buf[tmp.year][tmp.numm][0] = tmp.year;
+
+        buf[tmp.year][tmp.numm][1] = tmp.month;
+        buf[tmp.year][tmp.numm][2] = tmp.day;
+        tmp.fun();
+    }
+    int y1,num1;
+    //int ansy=0,ansm=0,ansd=0;
+    while(scanf("%d%d",&y1,&num1)!=EOF) {
+        
+        printf("%04d-%02d-%02d\n",buf[y1][num1][0],buf[y1][num1][1],buf[y1][num1][2]);
+    }
+    
+    
+    return 0;
+}
+
+
