@@ -1,0 +1,184 @@
+
+#include <cstdio>
+#include <cstring>
+#include <algorithm>
+#include <cmath>
+#include <cstdlib>
+
+using namespace std;
+
+typedef int datatype;
+typedef struct node{   //define a struct
+    
+    datatype data;
+    struct node *next;
+}linknode, *link;
+
+link GetElem (link H, int i) { //按序号查找返回地址
+    
+    int j = -1;
+    link p = H;
+    if (i < 0)
+        return NULL;
+    while (p->next && j < i) {
+        p = p->next;
+        j++;
+    }
+    if (i==j)
+    {
+        return p;
+    }
+     else
+     {
+         return  NULL;
+     }
+    
+}
+link LocateElem(link H, datatype e) { //按值查找返回指针
+    
+    link p = H->next;
+    while (p && p->data != e){
+        p = p->next;
+    }
+    printf("%d\n",p->data);
+    return p;
+}
+void listInsert(link H, int i, datatype e) { //INSERT DATA
+    
+    link p,q;
+    if (i == 0) {
+        p = H;
+    } else {
+        p = GetElem(H, i);
+    }
+    if (p == NULL) exit(-1);
+    else {
+        q = (link)malloc(sizeof(linknode));
+        q->data = e;
+        q->next = p->next;
+        p->next = q;
+    }
+}
+void listDelete(link H,int i) { //DELETE DATA
+    
+    link p,q;
+    if(i == 0) {
+        p = H;
+    } else {
+        p = GetElem(H, i-1);
+    }
+    if (p && p->next) {
+        q = p->next;
+        p->next = q->next;
+        free(q);
+    } else {
+        exit(-1);
+    }
+}
+void listPrint(link H) {  //PRINT ALL DATA IN LIST
+    link p = H->next;
+    while(p) {
+        printf("%d ",p->data );
+        p = p->next;
+    }
+    printf("\n----------\n");
+
+}
+link Creatlist() {  //CREATE A LIST
+    
+    int a;
+    link H,p,r;
+    H = (link)malloc(sizeof(linknode));
+    r = H;
+    scanf("%d",&a);
+    while (a != -1){
+        p = (link)malloc(sizeof(linknode));
+        p->data = a;
+        r->next= p;
+        r = p;
+        scanf("%d",&a);
+    }
+    r->next = NULL;
+    return H;
+}
+void converse(link H) {
+    
+    link p,q;
+    p = H->next;
+    H->next = NULL;
+    while (p) {
+        
+        q = p;
+        p = p->next;
+        q->next = H->next;
+        H->next = q;
+    }
+}
+link maxp(link H) {
+    
+    link p,p1,q;
+    datatype m0,m1;
+    p1 = p = H->next;
+    if (p == NULL) exit(-1);
+    q = p->next;
+    if (q == NULL) return p;
+    m0 = p->data + q->data;
+    while(q->next) {
+        p = p->next;
+        q = q->next;
+        m1 = p->data + q->data;
+        if (m1 > m0) {
+            p1 = p;
+            m0 = m1;
+        }
+    }
+    printf("%d\n",p1->data);
+    return p1;
+}
+void mergee(link A, link B){
+    
+    link p,q,r;
+    p = A->next;
+    q = B->next;
+    r = A;
+    free(B);
+    while (p && q) {
+        if (p->data > q->data) {
+            r->next = q;
+            r = q;
+            q = q->next;
+        } else {
+            r->next = p;
+            r = p;
+            p = p->next;
+        }
+    }
+    if(p == NULL) p = q;
+    r->next = p;
+
+}
+int main() {
+    /*
+    link H;
+    H = Creatlist();
+    listPrint(H);
+    listInsert(H, 0, 11);
+    listPrint(H);
+    listDelete(H, 1);
+    listPrint(H);
+    datatype mm;
+    scanf("%d",&mm);
+    LocateElem(H, mm);
+    
+    converse(H);
+    listPrint(H);
+    maxp(H);
+     */
+    link A, B;
+    A = Creatlist();
+    B = Creatlist();
+    printf("\n------\n");
+    mergee(A, B);
+    listPrint(A);
+    return 0;
+}
