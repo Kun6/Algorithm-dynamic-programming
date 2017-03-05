@@ -1,0 +1,92 @@
+
+#include <cstdlib>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <ctime>
+#include <algorithm>
+#define MAXMIM 1024
+
+using namespace std;
+
+typedef struct node {
+    
+    int data;
+    struct node *next;
+}slink, *link;
+
+link creatList(int n) {
+    
+    link H, q, r;
+    int m = 2;
+    //scanf("%d",&m);
+    H = (link)malloc(sizeof(slink));
+    r = H;
+    r->data = 1;
+    for(int i = 0; i < n-1; i++) {
+        q = (link)malloc(sizeof(slink));
+        r->next = q;
+        q->data = m;
+        r = q;
+        m++;
+        
+    }
+    //r->next = m;
+    r->next = H;
+    return H;
+}
+link getElem(link H, int i) {
+    
+    int j = 0;
+    link p = H;
+    while(p->next && j < i) {
+        p = p->next;
+        j++;
+    }
+    if (j == i) return p;
+    else return NULL;
+}
+link listDelete(link p) {
+    
+    link q = p;
+    while(q->next != p) q = q->next;
+    q->next = p->next;
+    free(p);
+    return p->next;
+}
+void game(link H, int k, int m) {
+    
+    link p;
+    p = getElem(H, k-1);
+    while (p != p->next) {
+    for(int j = 0; j < m-1; j++) {
+        p = p->next;
+    }
+        printf("%d ",p->data);
+        p = listDelete(p);
+    }
+    printf("%d\n",p->data);
+}
+void listPrint(link H) {
+    
+    link p;
+    p = H;
+    int i = 0;
+    while(i <=7) {
+        printf("%d",p->data);
+        p = p->next;
+        i++;
+    }
+}
+int main () {
+    
+    int n, k, m;
+    while(scanf("%d%d%d",&n,&k,&m) != EOF) {
+        link H;
+        H = creatList(n);
+        //listPrint(H);
+        game(H, k, m);
+    }
+    return 0;
+}
+
