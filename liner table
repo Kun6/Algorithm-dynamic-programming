@@ -1,0 +1,90 @@
+
+#include <cstdlib>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <ctime>
+#include <algorithm>
+#define MAXMIM 1024
+
+using namespace std;
+
+typedef int datatype;
+typedef struct {
+    
+    datatype data[MAXMIM];
+    int last;
+}sqlist, *sqlink;
+
+sqlink creatList() {
+    
+    sqlink H;
+    H = (sqlink)malloc(sizeof(sqlist)); //important!!
+    datatype a;
+    int i = -1;
+    scanf("%d",&a);
+    while(a != -2 && i < MAXMIM) {
+        i++;
+        H->data[i] = a;
+        scanf("%d",&a);
+    }
+    H->last = i;
+    return H;
+}
+int listInsert(sqlink H,int i, datatype e) {
+    
+    if(H->last >= MAXMIM-1) return -1;
+    if (i >= 0 && i <= H->last + 1) {
+        for(int j = H->last; j >= i; j--) {
+            H->data[j+1] = H->data[j];
+        }
+        H->data[i] = e;
+        H->last++;
+    } else {
+        return -1;
+    }
+    return 1;
+}
+void listDelete(sqlink H,int i) {
+    
+    if (i < 0 || i > H->last) exit(-1);
+    for (int j = i; j < H->last; j++) {
+        H->data[j] = H->data[j + 1];
+    }
+    H->last--;
+}
+int locateELem(sqlink H, datatype e) {
+    
+    int j;
+    for (j = 0; j <= H->last; j++) {
+        if (H->data[j] == e) {
+            break;
+        }
+    }
+    if (j > H->last) return -1;
+    else return (j);
+    
+}
+void listPrint(sqlink H) {
+    
+    int i = 0;
+    for (i = 0; i <= H->last; i++) {
+        printf("%d ",H->data[i]);
+    }
+    printf("\nlast is: %d",H->last);
+    printf("\n-------\n");
+}
+int main() {
+    sqlink H;
+    H = creatList();
+    listPrint(H);
+    listInsert(H, 0, 5);
+    listPrint(H);
+    listDelete(H, 1);
+    listPrint(H);
+    int mm;
+    scanf("%d",&mm);
+    printf("\n-----%d\n",locateELem(H, mm));
+    return 0;
+}
+
