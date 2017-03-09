@@ -1,0 +1,70 @@
+
+#include <cstdio>
+#include <cstdlib>
+#include <cmath>
+#include <cstring>
+#include <algorithm>
+#define M 100001
+
+using namespace std;
+
+struct stu {
+    
+    char num[202];
+    char name[202];
+    char sex[22];
+    int year;
+}buff[1001];
+bool cmp(stu a, stu b) {
+    
+    int m = strcmp(a.num, b.num);
+    return m < 0;
+}
+int main() {
+    
+    //printf("%d\n",strcmp("a","b"));
+    int N;
+    int m = 0;
+    while(scanf("%d",&N) != EOF) {
+       
+        m = 0;
+    for(int i = 0; i < N; i++) {
+            scanf("%s%s%s%d",buff[i].num,buff[i].name,buff[i].sex,&buff[i].year);
+        }
+        sort(buff, buff+N, cmp);
+        scanf("%d",&m);
+    for( ; m>0 ; m--) {
+        int beg = 0, end = N-1;
+        char inputNum[202];
+        int ans = 0;
+        int temp = (beg + end) / 2;
+        scanf("%s",inputNum);
+        while (beg <= end) {
+             temp = (beg + end) / 2;
+            if(strcmp(buff[temp].num , inputNum)==0) {
+                ans = 1;
+                //aa = temp;
+                break;
+            }
+            if(strcmp(buff[temp].num,inputNum)>0) {
+                ans = 0;
+                end = temp - 1;
+                continue;
+            }
+            if(strcmp(buff[temp].num,inputNum)<0) {
+                ans = 0;
+                beg = temp + 1;
+                continue;
+            }
+           
+        }
+            if (ans == 0) {
+                printf("No Answer!\n");
+            } else {
+            printf("%s %s %s %d\n",buff[temp].num,buff[temp].name,buff[temp].sex,buff[temp].year);
+            }
+        }
+        
+    }
+    return 0;
+}
