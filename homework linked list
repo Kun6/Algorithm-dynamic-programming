@@ -1,0 +1,200 @@
+#include <cstdio>
+#include <cstdlib>
+#include <algorithm>
+#include <cstring>
+#include <cmath>
+#include <iostream>
+using namespace std;
+
+typedef struct node{
+    
+    int data;
+    struct node *next;
+}sqlink, *link;
+
+link creatList() {
+    
+    
+    int m;
+    link H, r;
+    link p;
+    H = (link) malloc(sizeof(sqlink));  //创建头节点
+    r = H;
+    printf("请输入数据并且以-1结尾。\n");
+    scanf("%d",&m);
+    
+    while(1) {   //给单链表输入数据
+        
+        if(m == -1) break;
+        p = (link)malloc(sizeof(sqlink));
+        p->data = m;
+        r->next = p;
+        r = p;
+        scanf("%d",&m);
+        //fflush(stdin);
+    }
+    r->next = NULL;
+    return H;
+}
+
+int Listnum(link H) {      //返回单项链表中数据的总个数
+    link p;
+    p = H->next;
+    int number = 0;
+    while(p) {
+        number++;
+        p = p->next;
+    }
+    return number;
+}
+void showlist(link H) {
+    
+    link p;
+    p = H->next;
+    while(p) {
+        
+        printf("%d-",p->data);
+        p = p->next;
+    }
+    printf("\n");
+}
+link Adjmax(link H, int k) {
+    
+
+    link p, q, r, m;
+    r = H->next;
+    p = H->next;
+    m = H->next;
+    q = H->next;
+  
+    int m1 = 0, m0= 0;
+    if(k > Listnum(H)) return NULL;
+    while(q != NULL) {
+        
+        int t = k;
+  
+        m1 = 0;
+        while(t) {
+            
+            m1 = m1 + p->data;
+            p = p->next;
+            q = p;
+            t--;
+        }
+        if (m1 >= m0) {
+            m0 = m1;      //m0 记录相邻k个节点的最大值
+            r = m;
+        }
+        //q = p;
+        m = m->next;
+        p = m;
+
+    }
+    return r;
+    
+}
+int getElem(link H, int data) {   //返回元素所对应的序号
+    
+    int j = 0;
+    link p;
+    p = H->next;
+    while(p->data != data && p) {
+            p = p->next;
+            j++;
+        
+    }
+    if(p != NULL) return j;
+    else return -1;
+}
+int main() {
+    
+    int k = 0;
+    link A,R;
+    int mm = 1;
+    
+    while(mm == 1){
+     
+        scanf("%d",&k);
+        A = creatList();
+        R = Adjmax(A, k);
+        if(R != NULL) {
+            int index = getElem(A, R->data);
+            printf("节点的序号是:%d, 节点的值是:%d\n",index,R->data);
+        } else {
+            printf("你输入的k值超过了数据的长度，输入非法！\n");
+        }
+        printf("是否继续呢？是：按1 否：按0:-）\n");
+        scanf("%d",&mm);
+        if(mm == 0){
+            free(A);
+            free(R);
+        }
+
+    }
+
+  
+     return 0;
+}
+
+
+
+
+
+
+
+
+
+
+/*
+link Adimax(link H, int k) {
+    
+    创建4个link类型的指针m，p，q，r指向单项链表的第一个元素a0；
+    m作为计算k个元素的位置标记，但是记录k中第一个元素的位置；
+    r作为记录满足题意时，相邻k个元素的第一个元素的位置；
+    q作为相邻k个元素的最后一个元素；
+    while(当q不为空时) {
+        while(k--){
+            用p来计算相邻k个元素中数据的总和并且记录与m1之中；
+        }
+        if(m1大于m0){
+            r移动至此时m的位置；
+            m0 = m1；
+        }
+        m，q继续移动；
+    }
+    return r;
+    
+}
+
+*/
+
+/*
+using namespace std;
+
+typedef struct node {
+    
+    float coef;
+    int exp;
+    struct node *next;
+}linknode, *link;
+
+link create(int a[], int b[]){
+    
+    link A,p,r;
+    A = (link)malloc(sizeof(linknode));
+    r = A;
+    int i = 0;
+    for(i = 0; a[i] != -1; i++) {
+        
+    }
+}
+
+
+
+
+int main() {
+    
+    
+    return 0;
+}
+*/
