@@ -1,0 +1,205 @@
+#include <cstdio>
+#include <cstdlib>
+#include <algorithm>
+#include <cstring>
+#include <cmath>
+#include <iostream>
+using namespace std;
+
+typedef struct node{
+    
+    float coef;
+    int data;
+    struct node *next;
+}sqlink, *link;
+
+link creatList() {
+    
+    
+    int m;
+    float coef;
+    link H, r;
+    link p;
+    H = (link) malloc(sizeof(sqlink));  //创建头节点
+    r = H;
+    printf("请输入数据'系数 指数'输入并且以-1 -1结尾。\n");
+    scanf("%f%d",&coef,&m);
+    
+    while(1) {   //给单链表输入数据
+        
+        if(m == -1 && coef == -1) break;
+        p = (link)malloc(sizeof(sqlink));
+        p->data = m;
+        p->coef = coef;
+        r->next = p;
+        r = p;
+        scanf("%f%d",&coef,&m);
+        
+    }
+    r->next = NULL;
+    return H;
+}
+
+int Listnum(link H) {      //返回单项链表中数据的总个数
+    link p;
+    p = H->next;
+    int number = 0;
+    while(p) {
+        number++;
+        p = p->next;
+    }
+    return number;
+}
+void showlist(link H) {
+    
+    link p;
+    p = H->next;
+    if (p == NULL) {
+        printf("0\n");
+    } else {
+        if(p->data == 0) {
+            printf("%.1f + ",p->coef);
+        } else {
+    printf("%.0fx^%d + ",p->coef,p->data);
+        }
+    while(p->next->next) {
+        p = p->next;
+       
+        printf("%.0fx^%d + ",p->coef,p->data);
+        //p = p->next;
+    }
+    p = p->next;
+    printf("%.0fx^%d.",p->coef,p->data);
+    printf("\n");
+    }
+}
+link Adjmax(link H, int k) {
+    
+
+    link p, q, r, m;
+    r = H->next;
+    p = H->next;
+    m = H->next;
+    q = H->next;
+  
+    int m1 = 0, m0= 0;
+    if(k > Listnum(H)) return NULL;
+    while(q != NULL) {
+        
+        int t = k;
+  
+        m1 = 0;
+        while(t) {
+            
+            m1 = m1 + p->data;
+            p = p->next;
+            q = p;
+            t--;
+        }
+        if (m1 >= m0) {
+            m0 = m1;      //m0 记录相邻k个节点的最大值
+            r = m;
+        }
+        //q = p;
+        m = m->next;
+        p = m;
+
+    }
+    return r;
+    
+}
+int getElem(link H, int data) {   //返回元素所对应的序号
+    
+    int j = 0;
+    link p;
+    p = H->next;
+    while(p->data != data && p) {
+            p = p->next;
+            j++;
+        
+    }
+    if(p != NULL) return j;
+    else return -1;
+}
+link func(link A, link B) {
+    
+    link af,al,bf,bl;
+    af = A->next;
+    bf = B->next;
+    al = A;
+    bl = bf;
+    while(1) {
+        
+        if(af->data > bf->data) {
+            bl = bf;
+            bf = bf->next;
+            bl->next = af;
+            al->next = bl;
+            al = al->next;
+            bl = bf;
+            
+        }
+        if(af->data < bf->data) {
+            al = af;
+            af = af->next;
+            
+        }
+        if(af->data == bf->data) {
+            
+            bl = bf;
+            bf = bf->next;
+            al = af;
+            af = af->next;
+            al->coef = al->coef + bl->coef;
+        }
+        if(af == NULL) {
+            al->next = bf;
+            af = bf;
+            break;
+        }
+        if(bf == NULL) {
+            break;
+        }
+    }
+    return A;
+}
+
+int main() {
+    
+    //int k = 0;
+    link A,B;
+    int mm = 1;
+    
+    while(mm == 1){
+     
+        //scanf("%d",&k);
+        A = creatList();
+        B = creatList();
+        func(A, B);
+        /*if(R != NULL) {
+            int index = getElem(A, R->data);
+            printf("节点的序号是:%d, 节点的值是:%d\n",index,R->data);
+        } else {
+            printf("你输入的k值超过了数据的长度，输入非法！\n");
+        }
+         */
+        showlist(A);
+        printf("是否继续呢？是：按1 否：按0:-）\n");
+        scanf("%d",&mm);
+        if(mm == 0){
+            free(A);
+           // free(R);
+            free(B);
+        }
+
+    }
+
+  
+     return 0;
+}
+
+
+
+
+
+
