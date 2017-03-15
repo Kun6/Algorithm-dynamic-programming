@@ -1,0 +1,233 @@
+#include <cstdio>
+#include <cstdlib>
+#include <algorithm>
+#include <cstring>
+#include <cmath>
+#include <iostream>
+#define MAX 1024
+using namespace std;
+
+
+typedef int datatype;
+
+//*******************//
+
+typedef struct {
+    
+    datatype data[MAX];
+    int top;
+}sqstack,*sqlink;
+
+//********************//
+
+typedef struct node {
+    
+    datatype data;
+    struct node *next;
+}snode,*slink;
+
+//********************//
+
+
+//********linked stack***********//
+slink clearStackLinked(slink top){
+    
+    top = NULL;
+    return top;
+}
+int lEmptyStack(slink top) {
+    
+    if(top == NULL) return 1;
+    else return 0;
+}
+slink lPush(slink top, datatype e) {
+    
+    slink p;
+    p = (slink)malloc(sizeof(snode));
+    p->data = e;
+    p->next = top;
+    top = p;
+    return top;
+}
+datatype lPop(slink *top) {
+    
+    datatype m = (*top)->data;
+    slink p;
+    if(lEmptyStack(*top)) return 0;
+    p = *top;
+    *top = (*top)->next;
+    free (p);
+    return m;
+}
+
+void listStack(slink top) {
+    
+    printf("begin to show\n");
+    slink p = top;
+    while(p) {
+        printf("%d ",p->data);
+        p = p->next;
+    }
+}
+//*******listed stack************//
+
+void clearStack(sqlink s){
+    
+    s->top = -1;
+}
+
+int emptyStack(sqlink s) {
+    
+    if(s->top < 0) return 1;
+    else return 0;
+}
+int push(sqlink s, datatype e) {
+    
+    if(s->top >= MAX-1) return 0;
+    s->top++;
+    s->data[s->top] = e;
+    return 1;
+}
+datatype pop(sqlink s) {
+    if(s->top < 0) return NULL;
+    s->top--;
+    return s->data[s->top+1];
+}
+datatype getTop(sqlink s) {
+    if(s->top < 0) return NULL;
+    return(s->data[s->top]);
+}
+void showStack(sqlink s){
+    int a = s->top;
+    while(a>=0) {
+        printf("%d ",s->data[a]);
+        a--;
+    }
+}
+
+//*************************//
+
+void fDtoBlinked(int dec) {
+    //printf("--");
+    slink q;
+    //printf("--");
+    q = (slink)malloc(sizeof(snode));
+    q = clearStackLinked(q);
+    //printf("--");
+    int x = dec;
+    if(dec < 0) x = -1 * x;
+    if( dec > -2 && dec < 2) {
+        printf("%d",dec);
+        return;
+    }
+    while(x != 0) {
+        q = lPush(q, x%2);
+        x = x/2;
+    }
+    if(dec < 0) printf("-");
+    else {
+        while(!lEmptyStack(q)) {
+            printf("%d",lPop(&q));
+        }
+    }
+    printf("\n");
+    free(q);
+}
+
+void fDtoBlist(int dec) {
+   
+    sqlink q;
+    
+    q = (sqlink)malloc(sizeof(sqstack));
+    clearStack(q);
+    
+    int x = dec;
+    if(dec < 0) x = -1 * x;
+    if( dec > -2 && dec < 2) {
+        printf("%d",dec);
+        return;
+    }
+    while(x != 0) {
+        push(q, x%2);
+        x = x/2;
+    }
+    //showStack(q);
+    if(dec < 0) printf("-");
+    else {
+        while(!emptyStack(q)) {
+            printf("%d",pop(q));
+        }
+    }
+    printf("\n");
+    free(q);
+}
+
+int main() {
+   /*
+    sqlink s = (sqlink)malloc(sizeof(sqstack));
+    clearStack(s);
+    datatype m;
+    scanf("%d",&m);
+    while(m != -1){
+        push(s, m);
+        scanf("%d",&m);
+    }
+    showStack(s);
+    free(s);
+    */
+    
+    fDtoBlist(3);
+    fDtoBlinked(3);
+    int me = 0;
+    scanf("%d",&me);
+    while(me != 99) {
+    fDtoBlinked(me);
+        printf("------------\n");
+        fDtoBlist(me);
+        scanf("%d",&me);
+    }
+    
+    slink s;
+    s = (slink)malloc(sizeof(snode));
+    
+    s = clearStackLinked(s);
+    datatype m;
+    scanf("%d",&m);
+    while(m != -1) {
+        s = lPush(s, m);
+        scanf("%d",&m);
+    }
+    int a = lEmptyStack(s);
+    listStack(s);
+    printf("-%d-\n",a);
+    printf("END!\n");
+    //free(s);
+    return 0;
+    
+}
+
+
+
+
+/*
+link Adimax(link H, int k) {
+    
+    创建4个link类型的指针m，p，q，r指向单项链表的第一个元素a0；
+    m作为计算k个元素的位置标记，但是记录k中第一个元素的位置；
+    r作为记录满足题意时，相邻k个元素的第一个元素的位置；
+    q作为相邻k个元素的最后一个元素；
+    while(当q不为空时) {
+        while(k--){
+            用p来计算相邻k个元素中数据的总和并且记录与m1之中；
+        }
+        if(m1大于m0){
+            r移动至此时m的位置；
+            m0 = m1；
+        }
+        m，q继续移动；
+    }
+    return r;
+    
+}
+
+*/
