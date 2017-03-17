@@ -1,0 +1,121 @@
+#include<cstdio>
+#include<cstdlib>
+#include <cstring>
+
+using namespace std;
+
+typedef struct node {
+    
+    char data;
+    struct node *next;
+}stk,*stlink;
+
+int empty(stlink s) {
+    
+    if(s == NULL) return 1;
+    else return 0;
+}
+
+char pop(stlink *s) {
+    
+    stlink p;
+    if(empty(*s)) return -1;
+    p = *s;
+    char ans = (*s)->data;
+    *s = (*s)->next;
+    free(p);
+    return ans;
+}
+
+void push(stlink *top, char e) {
+    
+    stlink p = (stlink)malloc(sizeof(stk));
+    p->data = e;
+    p->next = *top;
+    *top = p;
+}
+
+void clear(stlink *top) {
+    
+    stlink p;
+    while(!empty(*top)) {
+        
+        p = (*top)->next;
+        pop(top);
+        *top = p;
+    }
+    *top = NULL;
+}
+int length(stlink top) {
+    int i = 0;
+    stlink p = top;
+    while(p) {
+        i++;
+        p = p->next;
+    }
+    return i;
+}
+void show(stlink top) {
+    
+    char c;
+    stlink p = top;
+    while(p != NULL) {
+        c = p->data;
+        printf("%c",c);
+        p = p->next;
+    }
+    free(p);
+    printf("\n----\n");
+}
+
+void func(char a[],char b[]) {
+    
+    stlink top;
+    clear(&top);
+    //top = NULL;
+    
+    int i = 0;
+    while(a[i] != '*' && a[i] != '\0') {
+        
+        switch(a[i]) {
+            case '#': pop(&top); break;
+            case '@': clear(&top); break;
+            default: push(&top, a[i]);
+        }
+        i++;
+    }
+    push(&top, '\0');
+    //show(top);
+    
+    for(int j = length(top)-1; j >= 0; j--) {
+        
+        b[j] = pop(&top);
+    }
+}
+
+int main() {
+    
+    char a[300];
+    char b[300];
+  
+    /*
+    stlink am = NULL;
+    push(&am, 'q');
+    show(am);
+    char b = pop(&am);
+    printf("\n-----%c----",b);
+     */
+    
+    //scanf("%s",a);
+   // printf("--\n");
+    
+    while(scanf("%s",a) != EOF){
+    func(a, b);
+    //puts(b);
+    //    printf("!!!!");
+        printf("%s\n",b);
+      //  printf("????");
+    }
+    
+    return 0;
+}
