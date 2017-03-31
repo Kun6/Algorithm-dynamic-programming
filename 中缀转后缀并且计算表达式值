@@ -1,0 +1,221 @@
+
+#include <cstdlib>
+#include <cstdio>
+#include <cstring>
+#include <algorithm>
+
+using namespace std;
+
+typedef struct node {
+    
+    char data;
+    struct node *next;
+}stk,*sl;
+typedef struct nodef {
+    
+    float data;
+    struct nodef *next;
+}stkf,*slf;
+int empty (sl top) {
+    
+    if(top == NULL) return 1;
+    else return 0;
+}
+int empty (slf top) {
+    
+    if(top == NULL) return 1;
+    else return 0;
+}
+char pop(sl *top) {
+    char ans;
+    if(empty(*top)) return -1;
+    else {
+        ans = (*top)->data;
+        *top = (*top)->next;
+    }
+    return ans;
+}
+float fpop(slf *top) {
+    float ans;
+    if(empty(*top)) return -1;
+    else {
+        ans = (*top)->data;
+        *top = (*top)->next;
+    }
+    return ans;
+}
+void push(sl *top, char e) {
+    
+    sl p = (sl)malloc(sizeof(stk));
+    p->data = e;
+    p->next = *top;
+    *top = p;
+    
+}
+void fpush(slf *top, float e) {
+    
+    slf p = (slf)malloc(sizeof(stkf));
+    p->data = e;
+    p->next = *top;
+    *top = p;
+    
+}
+void clear(sl *top) {
+    
+    while(!empty(*top)) {
+        pop(top);
+        
+    }
+    *top = NULL;
+}
+char getTop(sl top){
+    
+    if(empty(top)) return 0;
+    else return top->data;
+}
+float getTop(slf top){
+    
+    if(empty(top)) return 0;
+    else return top->data;
+}
+void show(slf top) {
+    slf p;
+    p = top;
+    while(p != NULL){
+        printf("\n%.2f\n",p->data);
+        p = p->next;
+    }
+}
+int func(char a, char b) {
+    
+    switch(a) {
+        case '+':
+        case '-':
+            a = 1;
+            break;
+        case '*':
+        case '/':
+            a = 2;
+            break;
+        default:
+            a = 0;
+            
+    }
+    switch(b) {
+        case '+':
+        case '-':
+            b = 1;
+            break;
+        case '*':
+        case '/':
+            b = 2;
+            break;
+        case ')':
+            b = 3;
+            break;
+            
+    }
+    
+    if(a>=b) return 1;
+    else return 0;
+}
+void fun2(char a[], char b[]){ //中缀转后缀
+    
+    int i = 0, j = 0;
+    sl top = NULL;
+    push(&top, '#');
+    do {
+    
+        switch(a[i]) {
+            
+            case '#':
+                while(!empty(top)) {
+                    b[j++] = pop(&top);
+                }
+                break;
+            case'+':
+            case'-':
+            case'*':
+            case'/':
+            case'(':
+
+                while(func(getTop(top), a[i])) {
+                    b[j++] = pop(&top);
+                }
+                push(&top,a[i]);
+                break;
+                case')':
+                while(getTop(top) != '(') {
+                    b[j++] = pop(&top);
+                }
+                pop(&top);
+                break;
+                default:
+                b[j++] = a[i];
+   
+        }
+        
+    } while(a[i++] != '#');
+}
+float func3(char bb[]){  //后缀表达式计算
+    
+    slf top = NULL;
+    float temp = 0;
+    float a = 0, b = 0;
+    
+    for(int i = 0; bb[i]!='#' ; i++) {
+    switch (bb[i]) {
+        case '+':
+        a = fpop(&top);
+        b = fpop(&top);
+        temp = a + b;
+        fpush(&top,temp);
+         //   printf("%f",getTop(top));
+        break;
+        case '-':
+        a = fpop(&top);
+        b = fpop(&top);
+        temp = b - a;
+        fpush(&top,temp);
+         //   printf("%f",getTop(top));
+        break;
+    case '*':
+        a = fpop(&top);
+        b = fpop(&top);
+        temp = a * b;
+        fpush(&top,temp);
+          //  printf("%f",getTop(top));
+        break;
+    case '/':
+        a = fpop(&top);
+        b = fpop(&top);
+        temp = b/a;
+        fpush(&top,temp);
+        //    printf("%f",getTop(top));
+        break;
+        default:
+            fpush(&top, bb[i] - '0');
+            
+    }
+    }
+    //show(top);
+    return getTop(top);
+}
+int main() {
+    
+    
+    char a[30], b[30];
+    float ans = 0;
+    scanf("%s",a);
+    fun2(a,b);
+    int i = 0;
+    do{
+        printf("%c",b[i]);
+        i++;
+    }while(b[i]!='#');
+  //  printf("\n%zu",strlen(b));
+    printf("\n----------");
+    ans = func3(b);
+    printf("\n%.2f\n",ans);
+    return 0;
+}
