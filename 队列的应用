@@ -1,0 +1,96 @@
+#include <cstring>
+#include <cstdlib>
+#include <cstring>
+#include <algorithm>
+#include <queue>
+using namespace std;
+typedef char dt;
+typedef struct node {
+    
+    dt data;
+    struct node *next;
+}que,*lque;
+
+typedef struct {
+    
+    que *front, *rear;
+}lenqueue;
+
+void createQueue(lenqueue *q) {
+    
+    q->front = (lque)malloc(sizeof(que));
+    q->front->next = NULL;
+    q->rear = q->front;
+    
+}
+int emptyQueue(lenqueue *q) {
+    
+    if(q->front == q->rear) return 1;
+    else return 0;
+}
+void enQueue(lenqueue *q,dt x) {
+    
+    lque p = (lque)malloc(sizeof(que));
+    p->data = x;
+    p->next = NULL;
+    (q)->rear->next = p;
+    (q)->rear = p;
+}
+dt deQueue(lenqueue *q) {
+    
+    if(emptyQueue(q)) return NULL;
+    lque p;
+    p = (q)->front;
+    (q)->front = (q)->front->next;
+    free(p);
+    return (q->front->data);
+}
+void clearQueue(lenqueue *q){
+    
+    while(!emptyQueue(q)) {
+        deQueue(q);
+    }
+}
+void show(lenqueue *q) {
+    printf("-----\n");
+    lque p;
+    p = q->front->next;
+    while(p != NULL) {
+        printf("%c",p->data);
+        p = p->next;
+    }
+    printf("\n-----\n");
+}
+int main(){
+    
+    lenqueue q;
+    createQueue(&q);
+    int tag = 1;
+    char inp;  //define a input numb
+    printf("输入字符：\n");
+    //scanf("%c",&inp);
+    while(scanf("%c",&inp)==1) {
+        if(inp != '0' && inp != '@') {
+        enQueue(&q, inp);
+          
+    }
+        else if(inp == '0') {
+            printf("%c元素已经出队\n",deQueue(&q));
+           
+        }
+    else {
+        while(!emptyQueue(&q)) {
+            printf("%c",deQueue(&q));
+        }
+        //show(&q);
+        printf("\n");
+        printf("结束输入0，继续输入1\n");
+        scanf("%d",&tag);
+        if(tag == 0) break;
+        }
+        printf("输入字符\n");
+        scanf("%c",&inp);
+    }
+    
+    return 0;
+}
