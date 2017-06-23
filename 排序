@@ -1,0 +1,99 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <math.h>
+
+int finarr[10001];
+
+int quickpass(int arr[],int i, int j){  //i is the head, j is the tail
+
+    
+    arr[0] = arr[i];
+    int x = arr[i];
+    while(i < j){
+        while(arr[j] >= x && i<j) j--;
+        if(i<j)
+        {
+            arr[i] = arr[j];
+        }
+        while((arr[i] <= x )&&(i<j)){
+            i++;
+        }
+        if(i < j)
+        {
+       
+            arr[j] = arr[i];
+        }
+    }
+    arr[i] = arr[0];
+    return i;
+    
+}
+
+void quick(int i, int j, int arr[]){  // i is the head, j is the tail
+    
+    int m;
+    if (i >= j) return ;
+    m = quickpass(arr, i, j);
+    
+    quick(i,m-1,arr);
+    quick(m+1, j, arr);
+    
+    
+}
+
+int  *del(int arr[],int num, int *ne){
+    
+    int i = 1;
+    int j = 0;
+    int tmp;
+    while(i <= num){
+    finarr[j] = arr[i];
+    tmp = arr[i];
+    i++;
+
+        j++;
+    while(arr[i] == tmp){
+        
+        i++;
+    }
+    }
+    *ne = j;
+    return finarr;
+}
+
+int main(){
+
+    int num;
+    
+    while(scanf("%d",&num) != EOF){
+        
+        int arr[num+1];
+      
+        int length = 0;
+        for(int i = 0; i < 10001; i++){
+            
+            finarr[i] = 0;
+        }
+        
+        for(int i = 1; i < num + 1; i++){
+           
+            scanf("%d",&arr[i]);
+        }
+        quick(1, num, arr);
+        
+        //delete repeating number
+        int *fin;
+        fin = del(arr,num,&length);
+        //printf("%d",length);
+       
+        for(int m = 0; m < length-1 ; m++){
+            
+            printf("%d ",fin[m]);
+            
+        }
+         printf("%d\n",fin[length-1]);
+       
+    }
+    
+    return 0;
+}
